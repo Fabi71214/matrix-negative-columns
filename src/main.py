@@ -24,6 +24,17 @@ def find_negative_columns(matrix, m):
             res.append(j)
     return res
 
+def input_positive_int(prompt):
+    """Запрашивает целое положительное число с валидацией."""
+    while True:
+        try:
+            value = int(input(prompt))
+            if value <= 0:
+                print("Число должно быть положительным. Повторите ввод.")
+                continue
+            return value
+        except ValueError:
+            print("Некорректный ввод. Введите целое число.")
 
 def main():
     n = int(input("Введите количество строк n: "))
