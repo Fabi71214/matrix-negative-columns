@@ -1,65 +1,15 @@
-def input_matrix():
-    n = int(input("Введите количество строк n: "))
-    m = int(input("Введите количество столбцов m: "))
-    matrix = []
-    print("Введите элементы матрицы:")
-    for i in range(n):
-        row = []
-        for j in range(m):
-            x = float(input(f"a[{i}][{j}] = "))
-            row.append(x)
-        matrix.append(row)
-    return matrix
+import threading, time
+from http.server import HTTPServer
+from src.calc_module import MatrixRestHandler
+from src.input_module import send_matrix_rest
 
+API_URL = "http://127.0.0.1:8089/api/v1/analyze"
 
-def find_negative_columns(matrix, m):
-    res = []
-    for j in range(m):
-        prov = True
-        for i in range(len(matrix)):
-            if matrix[i][j] >= 0:
-                prov = False
-                break
-        if prov:
-            res.append(j)
-    return res
+server = HTTPServer(("127.0.0.1", 8089), MatrixRestHandler)
+threading.Thread(target=server.serve_forever, daemon=True).start()
+time.sleep(0.1)
 
-def input_positive_int(prompt):
-    """Запрашивает целое положительное число с валидацией."""
-    while True:
-        try:
-            value = int(input(prompt))
-            if value <= 0:
-                print("Число должно быть положительным. Повторите ввод.")
-                continue
-            return value
-        except ValueError:
-            print("Некорректный ввод. Введите целое число.")
-
-def main():
-    n = int(input("Введите количество строк n: "))
-    m = int(input("Введите количество столбцов m: "))
-    matrix = []
-    print("Введите элементы матрицы:")
-    for i in range(n):
-        row = []
-        for j in range(m):
-            x = float(input(f"a[{i}][{j}] = "))
-            row.append(x)
-        matrix.append(row)
-
-    print("Исходная матрица:")
-    for row in matrix:
-        print(row)
-
-    res = find_negative_columns(matrix, m)
-
-    if res:
-        print("Номера столбцов, содержащих только отрицательные элементы:")
-        print(res)
-    else:
-        print("Столбцов, содержащих только отрицательные элементы, нет.")
-
-
-if __name__ == "__main__":
-    main()
+m1 = [[-1.0, 2.0, 2.0], [-1.0, 2.0, 2.0], [-1.0, 2.0, 2.0]]
+r1 = send_matrix_rest(3, 3, m1, API_URL)
+print("Итог:", r1["message"])
+server.shutdown()
