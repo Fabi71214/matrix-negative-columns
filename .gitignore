@@ -11,3 +11,7 @@ dist/
 venv/
 __pycache__/
 *.pyc
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
