@@ -2,8 +2,12 @@ import json
 import urllib.request
 
 def validate_and_prepare_payload(n, m, matrix):
+    if isinstance(n, bool) or isinstance(m, bool) or not isinstance(n, int) or not isinstance(m, int):
+        raise TypeError("Размерности n и m должны быть целыми числами")
     if n <= 0 or m <= 0:
         raise ValueError("Размерности n и m должны быть целыми положительными числами (> 0)")
+    if len(matrix) != n or any(len(row) != m for row in matrix):
+        raise ValueError("Фактическая размерность матрицы не соответствует параметрам n и m")
     norm = [[float(v) for v in row] for row in matrix]
     return {"rows_count": n, "cols_count": m, "data_grid": norm}
 

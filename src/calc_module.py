@@ -9,6 +9,10 @@ def map_input_dto_to_internal(dto):
     return {"n": n, "m": m, "matrix": matrix}
 
 def find_negative_columns(n, m, matrix):
+    if n <= 0 or m <= 0:
+        raise ValueError("Размерности n и m должны быть положительными (> 0)")
+    if len(matrix) != n or any(len(row) != m for row in matrix):
+        raise ValueError("Фактическая размерность матрицы не соответствует n и m")
     res = []
     for j in range(m):
         prov = True
